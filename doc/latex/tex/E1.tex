@@ -1,0 +1,33 @@
+\section{Esercizio 1}
+
+\paragraph{\texttt{\textbf{Hash}}} Questa classe (\autoref{lst:hash}) ha come
+attributi {\tt hash}, un array di {\tt byte} di 32 elementi, e {\tt SHA256}, un
+{\tt MessageDigest} statico, generalmente istanziato con algoritmo SHA-256. Un
+oggetto può essere creato con un costruttore senza argomenti, il quale
+inizializza a 0 gli elementi di {\tt hash}, o con una lista di {\tt Object}. In
+tal caso {\tt hash} viene inizializzato con il digest prodotto da {\tt SHA256}
+utilizzando la concatenazione degli hashcode degli argomenti del costruttore.
+Sono stati aggiunti i metodi {\tt hashcode()}, per poter utilizzare
+correttamente un oggetto {\tt Hash} come chiave in una {\tt HashMap}, e {\tt
+getShortHash()}, che restituisce un'abbreviazione leggibile di {\tt hash} in un
+oggetto {\tt String}.
+
+\paragraph{\texttt{\textbf{Transaction}}} Con questa classe (\autoref{lst:tx}) è
+possibile istanziare transazioni o \emph{coinbase} (ovvero transazioni senza
+input) mediante il metodo statico {\tt createCoinbase()}. In entrambi i casi
+vengono effettuati controlli di consistenza sugli argomenti dei costruttori per
+verificare che:
+%
+\begin{enumerate*}
+  \item le chiavi del firmatario siano valide (utilizzando il metodo
+  {\tt checkKeyPair()});
+  \item l'importo trasferito sia valido e coperto;
+  \item il firmatario usi denaro a lui intestato.
+\end{enumerate*}
+
+\paragraph{\texttt{\textbf{Block}}} Con questa classe (\autoref{lst:block}) è
+possibile creare blocchi destinati ad una block chain. Il metodo privato {\tt
+rehash()} ricalcola l'hash del blocco chiamante. Viene utilizzato ogni volta che
+viene apportata una modifica al valore di un suo attributo e, in particolare,
+nel metodo {\tt mine()}, il quale incrementa il valore di {\tt nonce} ed esegue
+{\tt rehash()} finché l'hash prodotto non inizia con tre 0.

@@ -1,0 +1,71 @@
+\section{Esercizio 3}
+
+\paragraph{\texttt{\textbf{MidTerm}}} Questa classe (\autoref{lst:main})
+contiene il {\tt main()} del progetto. Questo utilizza il metodo {\tt init()}
+per generare una coppia di chiavi RSA per tre utenti fittizi, Alice, Bob e
+Carol, e ad ogni chiave associa un \emph{alias} (ad esempio, la chiave privata e
+la chiave pubblica di Alice sono rispettivamente ``SkA'' e ``PkA''). Questi
+vengono utilizzati per ricavare le vere chiavi tramite una {\tt HashMap}, mentre
+un'altra {\tt HashMap} viene utilizzata per ottenere l'alias da una chiave. Il
+metodo termina generando la block chain iniziale, composta da un solo blocco
+(\emph{non valido} -- il \emph{mining} dei blocchi deve essere eseguito sempre
+manualmente) contenente una coinbase di importo uguale a 10000 per Alice. Il
+metodo {\tt main()} prosegue stampando a schermo la lista degli utenti con le
+loro chiavi, utilizzando il metodo {\tt printUsers()}, e lo stato attuale della
+block chain, con il metodo {\tt printBlockChain()}\footnote{Per migliorare la
+leggibilità dell'output, la block chain verrà stampata a schermo solamente dopo
+l'esecuzione di un comando che ne modifica il contenuto (ovvero dopo {\tt
+transfer}, {\tt mine} o {\tt remove}).}. Successivamente attende l'inserimento
+di un comando da input. Oltre ai comandi che sono nella specifica del progetto,
+sono supportati anche i comandi {\tt help}, che, tramite il metodo {\tt
+printHelp()}, stampa a schermo i comandi supportati e come è possibile
+utilizzarli, {\tt users}, che esegue il metodo {\tt printUsers()}, e {\tt
+status}, che esegue il metodo {\tt printBlockChain()}. Gli altri comandi
+eseguono funzioni già offerte dalle altre classi ma alcuni di questi (ovvero
+{\tt report}, {\tt mine} e {\tt transfer}) devono prima effettuare il parsing
+degli argomenti per poterle applicare.
+
+\subsection*{Esempio di esecuzione} Partendo dalla block chain iniziale,
+effettuiamo una nuova transazione dall'output 0 del blocco 0 (ovvero dalla
+coinbase di Alice) per un importo di 10000 da destinarsi a Bob, eseguiamo una
+{\tt mine} sul primo e sul secondo blocco, e controlliamo lo stato della block
+chain:
+%
+\begin{lstlisting}[escapeinside={\#}{\#}, numbers=none, frame=none,
+basicstyle=\linespread{1.4}\fontsize{10}{8}\ttfamily]
+  $> transfer --in=0,0 --out=10000,PkB --sign=SkA,PkA
+  #$<omissis>$#
+  $> mine 0
+  Found nonce value 8214.
+  #$<omissis>$#
+  $> mine 1
+  Found nonce value 7865.
+  #$<omissis>$#
+  $> check
+  The block chain is valid!
+\end{lstlisting}
+%
+Adesso eseguiamo un'altra transazione, sempre dal primo blocco, verso Carol:
+%
+\begin{lstlisting}[escapeinside={\#}{\#}, numbers=none, frame=none,
+basicstyle=\linespread{1.4}\fontsize{10}{8}\ttfamily]
+  $> transfer --in=0,0 --out=5000,PkC --sign=SkA,PkA
+  #$<omissis>$#
+  $> mine 2
+  Found nonce value 1546.
+  #$<omissis>$#
+  $> check
+  The block chain is not valid.
+\end{lstlisting}
+%
+A causa di un double payment la block chain non è più valida. Annulliamo quindi
+la transazione rimuovendo l'ultimo blocco:
+%
+\begin{lstlisting}[escapeinside={\#}{\#}, numbers=none, frame=none,
+basicstyle=\linespread{1.4}\fontsize{10}{8}\ttfamily]
+  $> remove
+  Last block removed.
+  #$<omissis>$#
+  $> check
+  The block chain is valid!
+\end{lstlisting}

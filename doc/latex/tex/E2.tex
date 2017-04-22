@@ -1,0 +1,35 @@
+\section{Esercizio 2}
+
+\paragraph{\texttt{\textbf{BlockChain}}} Con questa classe (\autoref{lst:chain})
+è possibile creare una \emph{block chain}. Il costruttore genera un blocco
+iniziale (chiamato anche \emph{genesis block}) contenente una \emph{coinbase} e
+l'hash del blocco precedente inizializzato a 0. Il metodo {\tt
+isValidBlockChain()} controlla che ciascun blocco:
+%
+\begin{enumerate*}
+  \item abbia un hash valido (ovvero che inizi con tre 0);
+  \item contenga l'hash del blocco precedente valido;
+  \item non contenga transazioni che utilizzino un importo già esaurito (ovvero,
+  che non si verifichi un \emph{double payment}).
+\end{enumerate*}
+%
+Quest'ultimo controllo viene eseguito scorrendo la block chain in maniera
+ordinata e, per ciascun blocco, viene salvato un {\tt BitSet} con dimensione
+uguale al numero di output contenuti nella transazione del blocco. Se uno di
+questi output venisse speso in una transazione successiva, il bit di indice
+corrispondente a quell'output verrà impostato ad 1. Se una transazione dovesse
+spendere un output con bit già ad 1, il metodo ritorna {\tt false}. Il controllo
+del valore delle transazioni non viene effettuato perché il design della classe
+{\tt Transaction} non permette la creazione di transazioni con valori non
+consistenti. Il metodo {\tt getBalance()}\footnote{Ho modificato il nome di
+questo metodo da {\tt printBalance()} a {\tt getBalance()}, il quale non stampa
+a schermo ma restituisce un oggetto {\tt String}. L'importo verrà poi stampato a
+schermo nel metodo {\tt main()} della classe {\tt MidTerm}.} restituisce
+l'importo totale posseduto da un dato utente (identificato da una {\tt
+PublicKey}). Il calcolo di questo importo viene effettuato scorrendo a ritroso
+la block chain e, per ogni transazione contenente tra gli output la {\tt
+PublicKey} dell'utente, l'importo a lui erogato viene sommato al totale. Questo
+metodo tiene conto degli output già spesi in maniera analoga al metodo
+precedente (utilizzando un {\tt BitSet} per ogni transazione). Il metodo {\tt
+mine()} esegue il metodo omonimo su un determinato blocco. Per ogni blocco
+successivo, viene aggiornato l'hash del blocco precedente e del blocco stesso.

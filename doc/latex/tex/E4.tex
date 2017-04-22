@@ -1,0 +1,17 @@
+\section{Esercizio 4}
+
+Una chiusura (\emph{closure}) è una struttura dati che contiene un riferimento
+ad una funzione insieme al suo \emph{ambiente lessicale}, ovvero all'insieme dei
+binding delle variabili (locali e non locali) nello scope della funzione. Questo
+permette di trattare le funzioni come oggetti di prima classe (\emph{first-class
+objects}) e quindi associarle ad una variabile e ad effettuare chiamate alle
+funzioni anche al di fuori del contesto in cui sono state associate.
+
+In C\#, i {\tt delegate} sono oggetti che rappresentano un insieme modificabile
+(anche vuoto) di chiusure di funzioni aventi tutte la stessa \emph{firma},
+ovvero il numero dei parametri, il tipo dei parametri, e il tipo di ritorno. Il
+{\tt delegate} potrà poi essere utilizzato come un metodo, effettuando così una
+chiamata a ciascuna funzione ad esso associata, passando come loro argomenti gli
+stessi utilizzati dal {\tt delegate}\footnote{Riferimenti:
+\href{https://en.wikipedia.org/wiki/Closure_(computer_programming)}{Wikipedia},
+\href{https://msdn.microsoft.com/en-us/library/ms173171.aspx}{MSDN Microsoft}.}.
